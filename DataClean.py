@@ -9,11 +9,15 @@ data = data.drop( "customerID", axis=1)
 
 sns.barplot(x='InternetService', y='Churn', data=data)
 plt.title('Churn Rate by Internet Service')
+plt.savefig('Graphs/churn_by_internet_service.png', dpi=300, bbox_inches='tight')
 plt.show()
+
 
 sns.boxplot(x='Contract', y='tenure', hue='Churn', data=data)
 plt.title('Tenure Distribution by Contract and Churn')
+plt.savefig('Graphs/tenure_by_contract.png', dpi=300, bbox_inches='tight')
 plt.show()
+
 
 data['gender'] = data["gender"].map({
  'Male' : 1,
