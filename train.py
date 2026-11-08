@@ -1,5 +1,6 @@
 import numpy as np 
 import pandas as pd 
+import joblib
 from sklearn.compose import ColumnTransformer 
 from sklearn.preprocessing import OneHotEncoder
 from sklearn.model_selection import train_test_split, GridSearchCV, StratifiedKFold 
@@ -50,3 +51,14 @@ best_thresh =thresholds[np.argmax(f1_scores)]
 y_pred =(y_probs>=best_thresh).astype(int) 
 
 print(classification_report(y_test, y_pred))
+
+joblib.dump(
+    {
+        "transformer": transformer,
+        "model": best_model,
+        "threshold": best_thresh,
+        "feature_columns": list(X.columns),  
+    },
+    "churn_artifacts.joblib",
+)
+print("Saved churn_artifacts.joblib")
