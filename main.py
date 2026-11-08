@@ -4,12 +4,11 @@ from pydantic import BaseModel, Field
 import joblib
 import pandas as pd
 
-# Global variable to hold the loaded machine learning artifacts
+
 artifacts = {}
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    # Load model, transformer, threshold, and feature list on startup
     global artifacts
     try:
         artifacts = joblib.load("churn_artifacts.joblib")
@@ -17,7 +16,6 @@ async def lifespan(app: FastAPI):
     except Exception as e:
         print(f"Failed to load model artifacts: {e}")
     yield
-    # Clear memory on shutdown
     artifacts.clear()
 
 app = FastAPI(lifespan=lifespan, title="ChurnSense Prediction API")
@@ -53,24 +51,20 @@ def predict_churn(customer: CustomerData):
     if not artifacts:
         raise HTTPException(status_code=503, detail="Model artifacts are not loaded.")
     
-    # Convert Pydantic object to a single-row Pandas DataFrame
     input_df = pd.DataFrame([customer.model_dump()])
     
-    # Reorder columns to exactly match the training data layout
     expected_cols = artifacts["feature_columns"]
     input_df = input_df[expected_cols]
+
     
-    # Process categorical variables through the loaded ColumnTransformer
     transformer = artifacts["transformer"]
     X_processed = transformer.transform(input_df)
-    
-    # Generate probabilities using the tuned XGBoost model
+ 
     model = artifacts["model"]
     threshold = artifacts["threshold"]
     
     prob = model.predict_proba(X_processed)[0, 1]
     
-    # Apply the F1-optimized threshold instead of the default 0.5
     prediction = int(prob >= threshold)
     
     return PredictionResponse(
