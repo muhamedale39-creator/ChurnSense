@@ -1,30 +1,54 @@
-# ChurnSense
+# 📉 ChurnSense: End-to-End Telco Customer Churn Prediction & API
+
+[![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-blue.svg)](https://www.python.org/)
+[![FastAPI](https://img.shields.io/badge/FastAPI-0.100%2B-005571?logo=fastapi)](https://fastapi.tiangolo.com/)
+[![XGBoost](https://img.shields.io/badge/XGBoost-Model-orange.svg)](https://xgboost.readthedocs.io/)
+[![Streamlit](https://img.shields.io/badge/Streamlit-UI-FF4B4B?logo=streamlit&logoColor=white)](https://streamlit.io/)
+[![Docker](https://img.shields.io/badge/Docker-Containerized-2496ED?logo=docker&logoColor=white)](https://www.docker.com/)
+
+**ChurnSense** is a production-ready machine learning system designed to predict customer churn for telecommunication companies. It combines rigorous Exploratory Data Analysis (EDA), hyperparameter-tuned machine learning (`XGBoost`), a robust asynchronous backend (`FastAPI`), containerization (`Docker`), and an interactive user interface (`Streamlit`).
+
+---
+
+## 📊 Overview
 
 I built ChurnSense to predict which telecom customers are likely to cancel their service. I cleaned the Telco Customer Churn dataset, explored it with a couple of charts, and trained an XGBoost classifier tuned to catch as many churners as possible despite the imbalance between customers who stay and customers who leave.
 
-## Dataset
+---
+
+## 📁 Dataset
 
 I used the [Telco Customer Churn dataset](https://www.kaggle.com/datasets/blastchar/telco-customer-churn) from Kaggle. It contains 7,043 customers with account details, subscribed services, billing information, and a `Churn` label showing whether the customer left. I saved the original file in this repo as `dataset.csv`.
 
-## Project Structure
+---
 
-```
+## 🏗️ Project Structure
+
+```text
 ChurnSense/
 ├── Graphs/
 │   ├── churn_by_internet_service.png
 │   └── tenure_by_contract.png
 ├── DataClean.py
 ├── train.py
+├── main.py
+├── Dockerfile
+├── app.py
+├── churn_artifacts.joblib
 ├── dataset.csv
 ├── cleaned_churn.csv
 └── README.md
 ```
 
 - `DataClean.py` cleans the raw data and creates the exploratory graphs.
-- `train.py` trains, tunes, and evaluates the model.
+- `train.py` trains, tunes, and evaluates the model, saving the artifacts as `churn_artifacts.joblib`.
+- `main.py` runs the production FastAPI backend.
+- `app.py` runs the interactive Streamlit frontend.
 - `dataset.csv` is the raw data and `cleaned_churn.csv` is my cleaned output.
 
-## Exploratory Analysis
+---
+
+## 🔍 Exploratory Analysis
 
 I generated graphs to understand what drives churn before modeling.
 
@@ -36,7 +60,9 @@ I generated graphs to understand what drives churn before modeling.
 
 ![Tenure by Contract](Graphs/tenure_by_contract.png)
 
-## Data Cleaning
+---
+
+## 🧹 Data Cleaning
 
 In `DataClean.py` I:
 
@@ -48,7 +74,9 @@ In `DataClean.py` I:
 - Converted `TotalCharges` to a numeric column and filled the missing values with 0.
 - Saved the result as `cleaned_churn.csv`.
 
-## Modeling
+---
+
+## 🤖 Modeling
 
 In `train.py` I:
 
@@ -60,38 +88,67 @@ In `train.py` I:
 
 I also imported Logistic Regression and Decision Tree classifiers as baseline options, but the final model is the tuned XGBoost classifier.
 
-## Results
+---
+
+## 📈 Results
 
 Evaluated on a held-out test set of 1,409 customers (20% stratified split).
 
-| Model               | ROC-AUC |
-|---------------------|---------|
-| Logistic Regression | 0.7983 (79.8%) |
+| Model               | ROC-AUC          |
+|---------------------|------------------|
+| Logistic Regression | 0.7983 (79.8%)   |
 | XGBoost (tuned)     | 0.8436 (84.3%)   |
 
-XGBoost was tuned with 5-fold stratified cross-validation using
-average precision as the scoring metric.
+XGBoost was tuned with 5-fold stratified cross-validation using average precision as the scoring metric.
 
-## How to Run
+---
 
-1. Clone the repository:
+## ⚙️ How to Run Locally
+
+1. **Clone the repository:**
    ```bash
    git clone https://github.com/muhamedale39-creator/ChurnSense.git
    cd ChurnSense
    ```
-2. Install the dependencies:
+
+2. **Install the dependencies:**
    ```bash
-   pip install numpy pandas matplotlib seaborn scikit-learn xgboost
+   pip install -r requirements.txt
    ```
-3. Clean the data and generate the graphs:
+
+3. **Clean the data and generate the graphs:**
    ```bash
    python DataClean.py
    ```
-4. Train and evaluate the model:
+
+4. **Train and evaluate the model:**
    ```bash
    python train.py
    ```
 
-## Tech Stack
+5. **Run the FastAPI Backend:**
+   ```bash
+   uvicorn main:app --reload --port 8000
+   ```
 
-Python, pandas, NumPy, scikit-learn, XGBoost, Matplotlib, Seaborn
+6. **Run the Streamlit Frontend (in a separate terminal):**
+   ```bash
+   streamlit run app.py
+   ```
+
+---
+
+## 🐳 Docker Deployment
+
+To build and run the container locally:
+
+```bash
+docker build -t churnsense-api .
+docker run -p 8000:8000 churnsense-api
+```
+
+---
+
+## 🛠️ Tech Stack
+
+Python, pandas, NumPy, scikit-learn, XGBoost, Matplotlib, Seaborn, FastAPI, Streamlit, Docker, Git, GitHub
