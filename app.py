@@ -77,11 +77,16 @@ if st.button("Predict Churn"):
                 prediction = result.get("churn_prediction")
                 probability = result.get("churn_probability")
                 
+                # Fallback logic to ensure status is never a dash
+                status = result.get("status")
+                if not status:
+                    status = "High Risk" if prediction == 1 else "Low Risk"
+                
                 st.success("Prediction received successfully!")
                 
                 col1, col2 = st.columns(2)
                 with col1:
-                    st.metric(label="Status", value=result.get("status"))
+                    st.metric(label="Status", value=status)
                 with col2:
                     st.metric(label="Churn Probability", value=f"{probability * 100:.2f}%")
                 
