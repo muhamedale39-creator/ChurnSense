@@ -14,7 +14,6 @@ st.markdown("Predict whether a customer is likely to churn based on their accoun
 st.sidebar.header("Customer Details Input")
 
 def user_input_features():
-    
     gender = st.sidebar.selectbox("Gender", options=[("Male", 1), ("Female", 0)], format_func=lambda x: x[0])[1]
     SeniorCitizen = st.sidebar.selectbox("Senior Citizen", options=[0, 1])
     Partner = st.sidebar.selectbox("Partner", options=[("Yes", 1), ("No", 0)], format_func=lambda x: x[0])[1]
