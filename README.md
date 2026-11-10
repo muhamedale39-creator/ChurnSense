@@ -10,6 +10,12 @@
 
 ---
 
+
+## 🚀 Live Demo & Endpoints
+
+- **Interactive Streamlit App:** [View Live App](https://churnsense-rwamwwk3ydnfmm7gw6kyds.streamlit.app/)
+- **FastAPI Backend Documentation:** [API Swagger Docs](https://churnsense-yw6n.onrender.com/docs)
+
 ## 📊 Overview
 
 I built ChurnSense to predict which telecom customers are likely to cancel their service. I cleaned the Telco Customer Churn dataset, explored it with a couple of charts, and trained an XGBoost classifier tuned to catch as many churners as possible despite the imbalance between customers who stay and customers who leave.
